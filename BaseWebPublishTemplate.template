@@ -85,7 +85,7 @@
                                                  " -r WebPublish",
                                                  " --region ", { "Ref" : "AWS::Region" }, "\n",
 				  "cfn-signal.exe -e %ERRORLEVEL%", 
-				  " --stack ", { "Ref" : "AWS::StackName" }, "\n",
+				  " --stack ", { "Ref" : "AWS::StackName" }, "\n"
                 ]]}
               },
 			  "C:\\WebPublishFile\\Git-2.13.0-64-bit.exe" : {

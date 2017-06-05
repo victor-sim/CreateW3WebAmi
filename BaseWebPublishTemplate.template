@@ -133,7 +133,28 @@
 		  "cfn-signal.exe -e %ERRORLEVEL%", 
 		  " --stack ", { "Ref" : "AWS::StackName" }, "\n",
           
-          "</script>"
+          "</script>", "\n",
+		  
+		  "<powershell>",  "\n",
+			"$EC2SettingsFile=\"C:\\Program Files\\Amazon\\Ec2ConfigService\\Settings\\Config.xml\"", "\n",
+			"$xml = [xml](get-content $EC2SettingsFile)", "\n",
+			"$xmlElement = $xml.get_DocumentElement()", "\n",
+			"$xmlElementToModify = $xmlElement.Plugins", "\n",
+			"foreach ($element in $xmlElementToModify.Plugin)", "\n",
+			"{", "\n",
+				"if ($element.name -eq \"Ec2SetPassword\"), "\n",
+				"{", "\n",
+					"Write-Host \" Ec2SetPassword state is $(element.State) \" ", "\n",
+					"element.State=\"Enabled\"", "\n",
+				"}", "\n",
+				"elseif ($element.name -eq \"Ec2HandleUserData\")"
+				"{", "\n",
+					"Write-Host \" Ec2HandleUserData state is $(element.State) \" ", "\n",
+					"$element.State=\"Enabled\"", "\n",
+				"}", "\n",
+			"}", "\n",
+			"$xml.Save($EC2SettingsFile)", "\n",
+		"</powershell>", "\n"
           ]]}},
 		"Tags" : [
             {

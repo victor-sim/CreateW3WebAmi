@@ -83,9 +83,7 @@
                   "path=Resources.WebPublish.Metadata.AWS::CloudFormation::Init\n",
                   "action=cfn-init.exe -v -s ", { "Ref" : "AWS::StackId" },
                                                  " -r WebPublish",
-                                                 " --region ", { "Ref" : "AWS::Region" }, "\n",
-				  "cfn-signal.exe -e %ERRORLEVEL%", 
-				  " --stack ", { "Fn::Base64" : { "Ref" : "%WaitHandle%" }}, "\n"
+                                                 " --region ", { "Ref" : "AWS::Region" }, "\n"
                 ]]}
               },
 			  "C:\\WebPublishFile\\Git-2.13.0-64-bit.exe" : {
@@ -130,15 +128,14 @@
           " -r WebPublish",
           " --region ", { "Ref" : "AWS::Region" }, "\n",
 		  
-		  "cfn-signal.exe -e %ERRORLEVEL%", 
-		  " --stack ",  { "Fn::Base64" : { "Ref" : "%WaitHandle%" }}, "\n",
+		  "cfn-signal.exe -e %ERRORLEVEL%", { "Fn::Base64" : { "Ref" : "%WaitHandle%" }}, "\n",
           
           "</script>"
           ]]}},
 		"Tags" : [
             {
                 "Key" : "Name",
-                "Value" : "WebPubTest"
+                "Value" : "WebPubTestImage"
             }
          ]
       },

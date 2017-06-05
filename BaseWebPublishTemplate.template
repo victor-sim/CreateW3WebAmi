@@ -102,7 +102,11 @@
 			  
 			  "2-installGit" : {
                 "command" : "C:\\WebPublishFile\\Git-2.13.0-64-bit.exe /VERYSILENT /COMPONENTS=\"icons,ext\\reg\\shellhere,assoc,assoc_sh\""
-              }
+              },
+			  
+			  "3-PS" : {
+			    "command" : "powershell.exe -ExecutionPolicy RemoteSigned -NonInteractive -Command \"C:\\Program` Files\\Amazon\\Ec2ConfigService\\Scripts\\UserScript.ps1\"", "\n"
+			  }
             },
             
             "services" : {
@@ -130,9 +134,13 @@
           " -r WebPublish",
           " --region ", { "Ref" : "AWS::Region" }, "\n",
 		  
+		  "powershell.exe -ExecutionPolicy RemoteSigned -NonInteractive -Command \"C:\\Program` Files\\Amazon\\Ec2ConfigService\\Scripts\\UserScript.ps1\"", "\n",
+		  
 		  "cfn-signal.exe -e %ERRORLEVEL%", 
 		  " --stack ", { "Ref" : "AWS::StackName" }, "\n",
           
+		  "powershell.exe -ExecutionPolicy RemoteSigned -NonInteractive -Command \"C:\\Program` Files\\Amazon\\Ec2ConfigService\\Scripts\\UserScript.ps1\"", "\n",
+		  
           "</script>", "\n",
 		  
 		  "<powershell>",  "\n",
@@ -145,12 +153,12 @@
 			"{", "\n",
 				"if ($element.name -eq \"Ec2SetPassword\")", "\n",
 				"{", "\n",
-					"Write-Host \" Ec2SetPassword state is $(element.State)\" ", "\n",
-					"element.State=\"Enabled\"", "\n",
+					"Write-Host \" Ec2SetPassword state is $($element.State)\" ", "\n",
+					"$element.State=\"Enabled\"", "\n",
 				"}", "\n",
 				"elseif ($element.name -eq \"Ec2HandleUserData\")", "\n",
 				"{", "\n",
-					"Write-Host \" Ec2HandleUserData state is $(element.State) \" ", "\n",
+					"Write-Host \" Ec2HandleUserData state is $($element.State) \" ", "\n",
 					"$element.State=\"Enabled\"", "\n",
 				"}", "\n",
 			"}", "\n",

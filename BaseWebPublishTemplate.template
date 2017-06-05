@@ -85,7 +85,7 @@
                                                  " -r WebPublish",
                                                  " --region ", { "Ref" : "AWS::Region" }, "\n",
 				  "cfn-signal.exe -e %ERRORLEVEL%", 
-				  " --stack ", { "Ref" : "AWS::StackName" }, "\n"
+				  " --stack ", { "Fn::Base64" : { "Ref" : "%WaitHandle%" }}, "\n"
                 ]]}
               },
 			  "C:\\WebPublishFile\\Git-2.13.0-64-bit.exe" : {
@@ -131,7 +131,7 @@
           " --region ", { "Ref" : "AWS::Region" }, "\n",
 		  
 		  "cfn-signal.exe -e %ERRORLEVEL%", 
-		  " --stack ", { "Ref" : "AWS::StackName" }, "\n",
+		  " --stack ",  { "Fn::Base64" : { "Ref" : "%WaitHandle%" }}, "\n",
           
           "</script>"
           ]]}},
@@ -141,7 +141,20 @@
                 "Value" : "WebPubTest"
             }
          ]
-      }
+      },
+
+  	  "%WaitHandle%" : {
+	    "Type" : "AWS::CloudFormation::WaitConditionHandle"
+	  },
+
+	  "%WaitHandle%Condition" : {
+	    "Type" : "AWS::CloudFormation::WaitCondition",
+	    "DependsOn" : "WebPublish",
+	    "Properties" : {
+		  "Handle" : {"Ref" : "%WaitHandle%"},
+		  "Timeout" : "3600"
+	    }
+	  }
     }
   },
 

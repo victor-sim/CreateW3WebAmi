@@ -90,8 +90,7 @@
                   "path=Resources.AmiPublish.Metadata.AWS::CloudFormation::Init\n",
                   "action=cfn-init.exe -v -s ", { "Ref" : "AWS::StackId" },
                                                  " -r AmiPublish",
-                                                 " --region ", { "Ref" : "AWS::Region" }, "\n",
-				  "cfn-signal.exe -e %ERRORLEVEL% ", { "Fn::Base64" : { "Ref" : "%WAIT_HANDLE%" }}, "\n"
+                                                 " --region ", { "Ref" : "AWS::Region" }, "\n"
                 ]]}
               },
 			  "C:\\InitFiles\\Git-2.13.0-64-bit.exe" : {
@@ -140,29 +139,16 @@
 		  
 		  "powershell.exe -ExecutionPolicy RemoteSigned -NonInteractive -Command \"C:\\InitFiles\\init.ps1\"", "\n",
 		  
-		  "cfn-signal.exe -e %ERRORLEVEL% ", { "Fn::Base64" : { "Ref" : "%WAIT_HANDLE%" }}, "\n",
+		  "/opt/aws/bin/cfn-signal -e $? --stack ", { "Ref" : "AWS::StackName" }, " --resource AmiPublish \n",
           
           "</script>", "\n"
           ]]}},
 		"Tags" : [
             {
                 "Key" : "Name",
-                "Value" : "WebPubTest"
+                "Value" : "AmiPublish"
             }
          ]
-      }
-    },
-	
-	"%WAIT_HANDLE%" : {
-      "Type" : "AWS::CloudFormation::WaitConditionHandle"
-    },
-
-    "%WAIT_HANDLE%Condition" : {
-      "Type" : "AWS::CloudFormation::WaitCondition",
-      "DependsOn" : "AmiPublish",
-      "Properties" : {
-        "Handle" : {"Ref" : "%WAIT_HANDLE%"},
-        "Timeout" : "3600"
       }
     }
   },

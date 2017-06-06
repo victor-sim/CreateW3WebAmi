@@ -32,6 +32,13 @@
       "MinLength" : "9",
       "MaxLength" : "18",
       "AllowedPattern" : "^([0-9]+\\.){3}[0-9]+\\/[0-9]+$"
+    },
+	
+    "AdminPassword" : {
+      "Description" : "Password for Admin Account",
+      "Type" : "String",
+      "MinLength" : "5",
+      "MaxLength" : "24"
     }
   },
 
@@ -94,21 +101,16 @@
 			  "C:\\InitFiles\\npp.7.4.1.x64.zip" : {
 			    "source" : "https://s3.us-east-2.amazonaws.com/win-install-apps/npp.7.4.1.bin.x64.zip"
 			  },
-			  "C:\\InitFiles\\init.ps1" : {
-				"source" : "https://s3.us-east-2.amazonaws.com/script-share/init.ps1"
+			  "C:\\InitFiles\\WebServerAmiInitScript.ps1" : {
+				"source" : "https://s3.us-east-2.amazonaws.com/script-share/WebServerAmiInitScript.ps1"
 			  }
             },
             "commands" : {
-              "1-installW3Service" : {
-                "command" : "start /w pkgmgr /iu:IIS-WebServerRole"
-              },
-			  
-			  "2-installGit" : {
-                "command" : "C:\\InitFiles\\Git-2.13.0-64-bit.exe /VERYSILENT /COMPONENTS=\"icons,ext\\reg\\shellhere,assoc,assoc_sh\""
-              },
-			  
-			  "3-PS" : {
-			    "command" : "powershell.exe -ExecutionPolicy RemoteSigned -NonInteractive -Command \"C:\\InitFiles\\init.ps1\""
+              "1-PS" : {
+			    "command" : { "Fn::Join" : ["", [
+					"powershell.exe -ExecutionPolicy RemoteSigned -NonInteractive -Command \"C:\\InitFiles\\WebServerAmiInitScript.ps1\"",
+					" -AdminPw ", { "Ref" : "AdminPassword" }
+				]]}
 			  }
             },
             

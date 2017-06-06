@@ -105,7 +105,7 @@
               },
 			  
 			  "3-PS" : {
-			    "command" : "powershell.exe -ExecutionPolicy RemoteSigned -NonInteractive -Command \"C:\\Program` Files\\Amazon\\Ec2ConfigService\\Scripts\\UserScript.ps1\"", "\n"
+			    "command" : "powershell.exe -ExecutionPolicy RemoteSigned -NonInteractive -Command \"C:\\Program` Files\\Amazon\\Ec2ConfigService\\Scripts\\UserScript.ps1\""
 			  }
             },
             

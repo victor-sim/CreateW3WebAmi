@@ -94,6 +94,9 @@
 			  "C:\\InitFiles\\npp.7.4.1.x64.zip" : {
 			    "source" : "https://s3.us-east-2.amazonaws.com/win-install-apps/npp.7.4.1.bin.x64.zip"
 			  }
+			  "C:\\InitFiles\\init.ps1" : {
+				"source" : "https://s3.us-east-2.amazonaws.com/script-share/init.ps1"
+			  }
             },
             "commands" : {
               "1-installW3Service" : {
@@ -105,7 +108,7 @@
               },
 			  
 			  "3-PS" : {
-			    "command" : "powershell.exe -ExecutionPolicy RemoteSigned -NonInteractive -Command \"C:\\Program` Files\\Amazon\\Ec2ConfigService\\Scripts\\UserScript.ps1\""
+			    "command" : "powershell.exe -ExecutionPolicy RemoteSigned -NonInteractive -Command \"C:\\InitFiles\\init.ps1\""
 			  }
             },
             
@@ -135,38 +138,12 @@
           " -r WebPublish",
           " --region ", { "Ref" : "AWS::Region" }, "\n",
 		  
-		  "powershell.exe -ExecutionPolicy RemoteSigned -NonInteractive -Command \"C:\\Program` Files\\Amazon\\Ec2ConfigService\\Scripts\\UserScript.ps1\"", "\n",
+		  "powershell.exe -ExecutionPolicy RemoteSigned -NonInteractive -Command \"C:\\InitFiles\\init.ps1\"", "\n",
 		  
 		  "cfn-signal.exe -e %ERRORLEVEL%", 
 		  " --stack ", { "Ref" : "AWS::StackName" }, "\n",
           
-		  "powershell.exe -ExecutionPolicy RemoteSigned -NonInteractive -Command \"C:\\Program` Files\\Amazon\\Ec2ConfigService\\Scripts\\UserScript.ps1\"", "\n",
-		  
-          "</script>", "\n",
-		  
-		  "<powershell>",  "\n",
-			"try{",  "\n",
-			"$EC2SettingsFile=\"C:\\Program Files\\Amazon\\Ec2ConfigService\\Settings\\Config.xml\"", "\n",
-			"$xml = [xml](get-content $EC2SettingsFile)", "\n",
-			"$xmlElement = $xml.get_DocumentElement()", "\n",
-			"$xmlElementToModify = $xmlElement.Plugins", "\n",
-			"foreach ($element in $xmlElementToModify.Plugin)", "\n",
-			"{", "\n",
-				"if ($element.name -eq \"Ec2SetPassword\")", "\n",
-				"{", "\n",
-					"Write-Host \" Ec2SetPassword state is $($element.State)\" ", "\n",
-					"$element.State=\"Enabled\"", "\n",
-				"}", "\n",
-				"elseif ($element.name -eq \"Ec2HandleUserData\")", "\n",
-				"{", "\n",
-					"Write-Host \" Ec2HandleUserData state is $($element.State) \" ", "\n",
-					"$element.State=\"Enabled\"", "\n",
-				"}", "\n",
-			"}", "\n",
-			"$xml.Save($EC2SettingsFile)", "\n",
-			"}catch{",  "\n",
-			"New-Item -Path C:\\Install.log -Value $_.Exception -Force -ItemType File -Verbose }",  "\n",
-		  "</powershell>", "\n"
+          "</script>", "\n"
           ]]}},
 		"Tags" : [
             {

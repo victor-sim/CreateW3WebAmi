@@ -93,7 +93,7 @@
 			  },
 			  "C:\\InitFiles\\npp.7.4.1.x64.zip" : {
 			    "source" : "https://s3.us-east-2.amazonaws.com/win-install-apps/npp.7.4.1.bin.x64.zip"
-			  }
+			  },
 			  "C:\\InitFiles\\init.ps1" : {
 				"source" : "https://s3.us-east-2.amazonaws.com/script-share/init.ps1"
 			  }

@@ -51,7 +51,7 @@
   },
 
   "Resources" : {
-    "WebPublishSecurityGroup" : {
+    "AmiPublishSecurityGroup" : {
       "Type" : "AWS::EC2::SecurityGroup",
       "Properties" : {
         "GroupDescription" : "Enable HTTP and RDP",
@@ -63,14 +63,14 @@
       }
     },
 	
-	"WebPublishEIP" : {
+	"AmiPublishEIP" : {
       "Type" : "AWS::EC2::EIP",
       "Properties" : {
-        "InstanceId" : { "Ref" : "WebPublish" }
+        "InstanceId" : { "Ref" : "AmiPublish" }
       }
     },
 
-    "WebPublish": {
+    "AmiPublish": {
       "Type" : "AWS::EC2::Instance",
       "Metadata" : {
         "AWS::CloudFormation::Init" : {
@@ -87,12 +87,11 @@
                 "content": { "Fn::Join" : ["", [
                   "[cfn-auto-reloader-hook]\n",
                   "triggers=post.update\n",
-                  "path=Resources.WebPublish.Metadata.AWS::CloudFormation::Init\n",
+                  "path=Resources.AmiPublish.Metadata.AWS::CloudFormation::Init\n",
                   "action=cfn-init.exe -v -s ", { "Ref" : "AWS::StackId" },
-                                                 " -r WebPublish",
+                                                 " -r AmiPublish",
                                                  " --region ", { "Ref" : "AWS::Region" }, "\n",
-				  "cfn-signal.exe -e %ERRORLEVEL%", 
-				  " --stack ", { "Ref" : "AWS::StackName" }, "\n"
+				  "cfn-signal.exe -e %ERRORLEVEL% ", { "Fn::Base64" : { "Ref" : "%WAIT_HANDLE%" }}, "\n"
                 ]]}
               },
 			  "C:\\InitFiles\\Git-2.13.0-64-bit.exe" : {
@@ -130,19 +129,18 @@
       "Properties": {
         "InstanceType" : { "Ref" : "InstanceType" },
         "ImageId" : { "Fn::FindInMap" : [ "AWSRegion2AMI", { "Ref" : "AWS::Region" }, { "Ref" : "OS" } ]},
-        "SecurityGroups" : [ {"Ref" : "WebPublishSecurityGroup"} ],
+        "SecurityGroups" : [ {"Ref" : "AmiPublishSecurityGroup"} ],
         "KeyName" : { "Ref" : "KeyName" },
         "UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
           "<script>\n",
 
           "cfn-init.exe -v -s ", { "Ref" : "AWS::StackId" }, 
-          " -r WebPublish",
+          " -r AmiPublish",
           " --region ", { "Ref" : "AWS::Region" }, "\n",
 		  
 		  "powershell.exe -ExecutionPolicy RemoteSigned -NonInteractive -Command \"C:\\InitFiles\\init.ps1\"", "\n",
 		  
-		  "cfn-signal.exe -e %ERRORLEVEL%", 
-		  " --stack ", { "Ref" : "AWS::StackName" }, "\n",
+		  "cfn-signal.exe -e %ERRORLEVEL% ", { "Fn::Base64" : { "Ref" : "%WAIT_HANDLE%" }}, "\n",
           
           "</script>", "\n"
           ]]}},
@@ -153,17 +151,30 @@
             }
          ]
       }
+    },
+	
+	"%WAIT_HANDLE%" : {
+      "Type" : "AWS::CloudFormation::WaitConditionHandle"
+    },
+
+    "%WAIT_HANDLE%Condition" : {
+      "Type" : "AWS::CloudFormation::WaitCondition",
+      "DependsOn" : "AmiPublish",
+      "Properties" : {
+        "Handle" : {"Ref" : "%WAIT_HANDLE%"},
+        "Timeout" : "3600"
+      }
     }
   },
 
   "Outputs" : {
-    "WebPublishURL" : {
-      "Value" : { "Fn::Join" : ["", ["http://", { "Ref" : "WebPublishEIP" } ]] },
-      "Description" : "WebPublish instance URL."
+    "AmiPublishURL" : {
+      "Value" : { "Fn::Join" : ["", ["http://", { "Ref" : "AmiPublishEIP" } ]] },
+      "Description" : "AmiPublish instance URL."
     },
-	"WebPublishInstanceId" : {
-	  "Value" :  { "Ref" : "WebPublish" } ,
-      "Description" : "WebPublish instance ID."
+	"AmiPublishInstanceId" : {
+	  "Value" :  { "Ref" : "AmiPublish" } ,
+      "Description" : "AmiPublish instance ID."
 	}
   }
 }

@@ -88,7 +88,7 @@
 				  " --stack ", { "Ref" : "AWS::StackName" }, "\n"
                 ]]}
               },
-			  "C:\\WebPublishFile\\Git-2.13.0-64-bit.exe" : {
+			  "C:\\InitFiles\\Git-2.13.0-64-bit.exe" : {
 			    "source" : "https://s3.us-east-2.amazonaws.com/win-install-apps/Git-2.13.0-64-bit.exe"
 			  },
 			  "C:\\InitFiles\\npp.7.4.1.x64.zip" : {
@@ -104,7 +104,7 @@
               },
 			  
 			  "2-installGit" : {
-                "command" : "C:\\WebPublishFile\\Git-2.13.0-64-bit.exe /VERYSILENT /COMPONENTS=\"icons,ext\\reg\\shellhere,assoc,assoc_sh\""
+                "command" : "C:\\InitFiles\\Git-2.13.0-64-bit.exe /VERYSILENT /COMPONENTS=\"icons,ext\\reg\\shellhere,assoc,assoc_sh\""
               },
 			  
 			  "3-PS" : {
@@ -128,7 +128,6 @@
       "Properties": {
         "InstanceType" : { "Ref" : "InstanceType" },
         "ImageId" : { "Fn::FindInMap" : [ "AWSRegion2AMI", { "Ref" : "AWS::Region" }, { "Ref" : "OS" } ]},
-		"DisableApiTermination" : "true",
         "SecurityGroups" : [ {"Ref" : "WebPublishSecurityGroup"} ],
         "KeyName" : { "Ref" : "KeyName" },
         "UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
